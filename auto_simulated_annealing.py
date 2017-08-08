@@ -9,6 +9,7 @@ import pandas
 import json
 import pickle as pkl
 import numpy as np
+import scipy.optimize as opt
 
 def run_cmd(description, cmd):
     print '[{}] {}'.format(description, ' '.join(cmd))
@@ -80,16 +81,7 @@ def main():
 
     os.chdir(old_folder)
 
-    result_memory = {}
-    print os.getcwd()
-    for website in website_list:
-        for chromium_version in chromium_version_list:
-            for i in np.arange(5):
-                now = time.time()
-                summary = tryChromeWithWebsite(chromium_version, chromium_version_list[chromium_version] + "/out/Default/chrome",
-                                         website, website_list[website])
-                result_memory[website, chromium_version, now] = summary
-    saveToPickle(result_memory, "mini_benchmark_" + time.strftime("%d_%m_%Y_%H_%M_%S", time.localtime()) + ".pkl")
+
     #
     # # build chromium at CHROMIUM_DIR
     # old_folder = os.getcwd()

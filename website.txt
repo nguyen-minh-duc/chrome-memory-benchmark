@@ -1,8 +1,4 @@
 {
-    "Google_Plus":     "https://plus.google.com/110031535020051778989/posts",
-    "Youtube":         "http://www.youtube.com",
-    "GoogleWebmaster": "http://googlewebmastercentral.blogspot.com/",
-    "Wordpress":       "http://en.blog.wordpress.com/2012/09/04/freshly-pressed-editors-picks-for-august-2012/",
     "Facebook":        "https://www.facebook.com/barackobama",
     "Linkedin":        "http://www.linkedin.com/in/linustorvalds",
     "Wikipedia":       "http://en.wikipedia.org/wiki/Wikipedia",
@@ -20,5 +16,6 @@
     "Yahoo_Sport":     "http://sports.yahoo.com/",
     "Techcrunch":      "http://techcrunch.com",
     "Reddit":          "http://reddit.com",
-    "Instagram":       "https://www.instagram.com/taylorswift/?hl=en"
+    "Instagram":       "https://www.instagram.com/taylorswift/?hl=en",
+    "Youtube":         "http://www.youtube.com"
 }

@@ -1,4 +1,3 @@
 {
-    "original_": "/usr/local/google/home/nmduc/chromium-original/src",
-    "group_optimized_rare_layer": "/usr/local/google/home/nmduc/chromium-group-opt/src"
+    "group_optimized": "/usr/local/google/home/nmduc/chromium-group-opt/src"
 }

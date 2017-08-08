@@ -9,6 +9,7 @@ import pandas
 import json
 import pickle as pkl
 import numpy as np
+from subprocess import call
 
 def run_cmd(description, cmd):
     print '[{}] {}'.format(description, ' '.join(cmd))
@@ -59,6 +60,13 @@ def main():
     CHROMIUM_VERSION_FILES = "./chromium.txt"
     CHROMIUM_VERSION_FILES = sys.argv[1]
     WEBSITE_LIST_FILE = sys.argv[2]
+    COMPUTED_STYLE_PY = "/usr/local/google/home/nmduc/chromium-group-opt/src/third_party/WebKit/Source/build/scripts/make_computed_style_base.py"
+    # COMPUTED_STYLE_PY = "./make_computed_style_base_test.py"
+    # read computed style python
+    code = ""
+    with open(COMPUTED_STYLE_PY, "r") as fo:
+        code = fo.read()
+
     # collect website url
     website_list = []
 
@@ -72,25 +80,49 @@ def main():
         chromium_version_list = json.load(fo)
         fo.close()
 
-    old_folder = os.getcwd()
-    for chromium_version_path in chromium_version_list.values():
-        os.chdir(chromium_version_path)
-        run_cmd("Build chromium: ", ["ninja", "-C", "out/Default", "-j", "1000", "chrome"])
-        os.chdir(old_folder)
+    # old_folder = os.getcwd()
+    # for chromium_version_path in chromium_version_list.values():
+    #     os.chdir(chromium_version_path)
+    #     run_cmd("Build chromium: ", ["ninja", "-C", "out/Default", "-j", "1000", "blink_tests"])
+    #     os.chdir(old_folder)
 
-    os.chdir(old_folder)
+    # os.chdir(old_folder)
 
     result_memory = {}
     print os.getcwd()
-    for website in website_list:
-        for chromium_version in chromium_version_list:
-            for i in np.arange(5):
-                now = time.time()
-                summary = tryChromeWithWebsite(chromium_version, chromium_version_list[chromium_version] + "/out/Default/chrome",
-                                         website, website_list[website])
-                result_memory[website, chromium_version, now] = summary
-    saveToPickle(result_memory, "mini_benchmark_" + time.strftime("%d_%m_%Y_%H_%M_%S", time.localtime()) + ".pkl")
-    #
+    # build with dif config
+    for i in np.arange(0.2, 0.3, 0.1):
+        for j in np.arange(0.3, 0.7, 0.1):
+            for k in np.arange(0.1, 0.6, 0.1):
+                code_new = code.replace("[0.1, 0.3, 1.0]", "[" + str(i) + ", " + str(j) +", 1.0]")
+                code_new = code_new.replace("[0.1, 1.0]", "[" + str(k) +", 1.0]")
+                with open(COMPUTED_STYLE_PY, "w") as fw:
+                    fw.write(code_new)
+                old_folder = os.getcwd()
+                for chromium_version_path in chromium_version_list.values():
+                    os.chdir(chromium_version_path)
+                    build_folder = "out/Default_" + str(i) + "_" + str(j) + "_" + str(k)
+                    # run_cmd("Gen build files: ", ["gn", "gen", "--args=use_goma=true", build_folder])
+                    # run_cmd("Config: ", ["echo", "use_goma=true > " + build_folder + "/args.gn"])
+                    # run_cmd("Gen build files: ", ["gn", "gen", build_folder])
+                    run_cmd("Build chromium: ", ["ninja", "-C", "out/Default", "-j", "1000", "blink_tests"])
+                    run_cmd("Copying build: ", ["cp", "-a", "out/Default", build_folder])
+                    run_cmd("Copying make_computed_style_base: ", ["cp", COMPUTED_STYLE_PY, build_folder + "/"])
+                    os.chdir(old_folder)
+                os.chdir(old_folder)
+                # print("[" + str(i) + "," + str(j) + "," + str(k) + "]")
+    #             for website in website_list:
+    #                 now = time.time()
+    #                 for chromium_version in chromium_version_list:
+    #                     summary = tryChromeWithWebsite(chromium_version, chromium_version_list[chromium_version] + "/out/Default/content_shell",
+    #                                          website, website_list[website])
+    #                     result_memory[website, chromium_version + "[" + str(i) + "," + str(j) + "," + str(k) + "]", now] = summary
+    # with open(COMPUTED_STYLE_PY, "w") as fw:
+    #     fw.write(code)
+    # saveToPickle(result_memory, "mini_benchmark_" + time.strftime("%d_%m_%Y_%H_%M_%S", time.localtime()) + ".pkl")
+
+
+
     # # build chromium at CHROMIUM_DIR
     # old_folder = os.getcwd()
     # print old_folder
