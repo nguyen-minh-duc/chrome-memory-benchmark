@@ -84,7 +84,7 @@ def main():
     print os.getcwd()
     for website in website_list:
         for chromium_version in chromium_version_list:
-            for i in np.arange(5):
+            for i in np.arange(2):
                 now = time.time()
                 summary = tryChromeWithWebsite(chromium_version, chromium_version_list[chromium_version] + "/out/Default/chrome",
                                          website, website_list[website])

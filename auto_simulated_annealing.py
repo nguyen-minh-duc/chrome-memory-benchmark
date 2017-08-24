@@ -9,7 +9,7 @@ import pandas
 import json
 import pickle as pkl
 import numpy as np
-import scipy.optimize as opt
+import scipy.optimize as optimizet
 
 def run_cmd(description, cmd):
     print '[{}] {}'.format(description, ' '.join(cmd))
