@@ -19,7 +19,7 @@ def autolabel(rects):
                 ha='center', va='bottom')
 
 def read_csv(filename):
-    return pandas.read_csv(filename, header=None, names=['time', 'event', 'object', 'address', 'size'], skipinitialspace=True, skipfooter=1)
+    return pandas.read_csv(filename, header=None, names=['time', 'event', 'object', 'address', 'size'], skipinitialspace=True, skipfooter=1, error_bad_lines=False)
 
 def get_csv_files(directory):
     csv_files = []
